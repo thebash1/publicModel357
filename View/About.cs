@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Model357App.Model;
+using System;
 using System.Drawing;
 using System.Windows.Forms;
 
@@ -6,6 +7,9 @@ namespace Model357App.View
 {
     public partial class About : Form
     {
+        private string urlProfile = "https://github.com/thebash1";
+        private string urlLicense = "https://www.apache.org/licenses/LICENSE-2.0";
+
         public About()
         {
             InitializeComponent();
@@ -16,6 +20,7 @@ namespace Model357App.View
             MaximizeBox = false;
             MinimizeBox = false;
             StartPosition = FormStartPosition.CenterScreen;
+            User user = new User();
 
             // Logo
             PictureBox logoBox = DinamicControls.CreatePictureBox
@@ -38,12 +43,12 @@ namespace Model357App.View
             descriptionBox.ReadOnly = true;
             descriptionBox.BorderStyle = BorderStyle.None;
 
-            Label licenseLabel = DinamicControls.CreateLabel("labelLicense", "Licencia: (Apache 2.0)", 30, 200, 200, 20);
+            Label licenseLabel = DinamicControls.CreateLinkLabel("labelLicense", "Licencia: (Apache 2.0)", new Point(30, 200), new Size(200, 20), licenseClick);
             licenseLabel.Font = new Font("Segoe UI", 10, FontStyle.Bold);
 
             // licencia del Proyecto
             TextBox licenseBox = DinamicControls.CreateTextBox("textboxLicense", 30, 220, 420, 100);
-            licenseBox.Text = "Copyright 2024 Model357 " +
+            licenseBox.Text = "Copyright 2024 Model 357 " +
                       "Licensed under the Apache License, Version 2.0 (the \"License\"); " +
                       "you may not use this file except in compliance with the License. " +
                       "You may obtain a copy of the License at " +
@@ -79,6 +84,12 @@ namespace Model357App.View
         private void AcercaDe_Load(object sender, EventArgs e)
         {
 
+        }
+
+        private void licenseClick(object sender, EventArgs e)
+        {
+            // Abrir enlace de licencia en el navegador predeterminado
+            System.Diagnostics.Process.Start(urlLicense);
         }
     }
 }

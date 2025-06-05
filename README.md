@@ -4,26 +4,30 @@ Prototipo para el analisis de datos de los estudiantes egresados de la Universid
 
 ## sprints  
 
+#### control de admins - admins  
+* registrar admins :white_check_mark:  
+* eliminar admins :white_check_mark:  
+* actualizar admins :white_check_mark:  
+* listar admins :white_check_mark:  
+
 #### control de usuarios - admin  
 * registrar usuarios :white_check_mark:
-* eliminar usuarios :x:   
-* actualizar usuarios :x:  
+* eliminar usuarios :white_check_mark:   
+* actualizar usuarios :white_check_mark:  
 * listar usuarios :white_check_mark:  
 
 #### control de encuesta - admin  
-* crear preguntas :x:  
-* eliminar preguntas :x:  
-* actualizar preguntas :x:  
-* listar preguntas :x:  
+* crear preguntas :white_check_mark:  
+* eliminar preguntas :white_check_mark:  
+* actualizar preguntas :white_check_mark:  
+* listar preguntas :white_check_mark:  
 
 #### control de encuesta - usuario registrado
-* crear preguntas :x:  
-* eliminar preguntas :x:  
-* actualizar preguntas :x:  
-* listar preguntas :x:  
+* crear preguntas :white_check_mark:  
+* eliminar preguntas :white_check_mark:  
+* actualizar preguntas :white_check_mark:  
+* listar preguntas :white_check_mark:  
 
 #### encuesta - egresado
-* responder encuesta :x:
+* responder encuesta :white_check_mark:
 
-#### resultados - todos  
-* ver gráfica del modelo estadístico :x:  

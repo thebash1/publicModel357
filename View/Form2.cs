@@ -1,4 +1,5 @@
-﻿using Model357App.View;
+﻿using Model357App.Model;
+using Model357App.View;
 using System;
 using System.Windows.Forms;
 
@@ -6,6 +7,7 @@ namespace Model357App
 {
     public partial class Form2 : Form
     {
+        private MenuEvent menuEvent;
         public Form2()
         {
             InitializeComponent();
@@ -15,15 +17,15 @@ namespace Model357App
             FormBorderStyle = FormBorderStyle.FixedSingle; // evitar redimensionamiento
             MaximizeBox = false;
 
-            string[] opciones = { "Archivo", "Administradores", "Usuarios", "Encuesta", "Configuración", "Ayuda" };
+            string[] opciones = { "Archivo", "Administradores", "Usuarios", "Encuesta", "Egresado", "Configuración", "Ayuda" };
             MenuStrip menu = DinamicControls.CreateMenuStrip(opciones);
 
             ToolStripMenuItem[] itemsAdmins =
             {
-                DinamicControls.CreateToolStripItem("Registrar administrador"),
-                DinamicControls.CreateToolStripItem("Actualizar administrador"),
-                DinamicControls.CreateToolStripItem("Eliminar administrador"),
-                DinamicControls.CreateToolStripItem("Listar administrador"),
+                DinamicControls.CreateToolStripItem("Registrar administradores"),
+                DinamicControls.CreateToolStripItem("Actualizar administradores"),
+                DinamicControls.CreateToolStripItem("Eliminar administradores"),
+                DinamicControls.CreateToolStripItem("Listar administradores"),
             };
 
             ToolStripMenuItem[] itemsUsuario =
@@ -47,31 +49,60 @@ namespace Model357App
 
             // Agregar submenú a un menú específico
             MenuEvent.AddToolStripItem(menu, opciones[0], new ToolStripMenuItem("Cerrar sesión"));
-            MenuEvent.AddToolStripItem(menu, opciones[opciones.Length - 1], new ToolStripMenuItem("Acerca de"));
+            MenuEvent.AddToolStripItem(menu, opciones[6], new ToolStripMenuItem("Acerca de"));
 
             // Agregar varios submenús a un menú especificado
             MenuEvent.AddToolStripMenuItems(menu, itemsAdmins, opciones[1]);
             MenuEvent.AddToolStripMenuItems(menu, itemsUsuario, opciones[2]);
             MenuEvent.AddToolStripMenuItems(menu, itemsEncuesta, opciones[3]);
-            MenuEvent.AddSubmenu(menu, opciones[4], "Color de fondo");
-            MenuEvent.AddSubmenu(menu, opciones[4], "Letra y tamaño");
+            MenuEvent.AddSubmenu(menu, opciones[4], "Responder formulario");
+            MenuEvent.AddSubmenu(menu, opciones[5], "Color de menu strip");
 
             // Agregar eventos a los submenús
             MenuEvent.EventSubmenu(menu, opciones[0], "Cerrar sesión", (sender, e) => this.Close());
+            MenuEvent.EventSubmenu(menu, opciones[1], "Registrar administradores", (sender, e) => menuEvent.OpenForm(new AddAdmin(), 1067, 600));
+            MenuEvent.EventSubmenu(menu, opciones[1], "Actualizar administradores", (sender, e) => menuEvent.OpenForm(new UpdateAdmin(), 800, 500));
+            MenuEvent.EventSubmenu(menu, opciones[1], "Listar administradores", (sender, e) => menuEvent.OpenForm(new ListAdmin(), 1067, 600));
+            MenuEvent.EventSubmenu(menu, opciones[1], "Eliminar administradores", (sender, e) => menuEvent.OpenForm(new DeleteAdmin(), 800, 500));
+
             MenuEvent.EventSubmenu(menu, opciones[2], "Registrar usuarios", (sender, e) => menuEvent.OpenForm(new Register(), 1067, 600));
             MenuEvent.EventSubmenu(menu, opciones[2], "Actualizar usuarios", (sender, e) => 
             {
-                MessageBox.Show("Por favor selecciona un id para actualizar", "Información", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                UpdateRegister updateRegister = new UpdateRegister();
+                updateRegister.Owner = this; // Establecer el propietario explícitamente
+                menuEvent.OpenForm(updateRegister, 800, 500); // Mostrar el formulario de actualización
             });
 
             MenuEvent.EventSubmenu(menu, opciones[2], "Eliminar usuarios", (sender, e) => 
             {
                 MessageBox.Show("Por favor selecciona un id para eliminar", "Información", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                menuEvent.OpenForm(new DeleteRegister(), 1067, 600);
+                menuEvent.OpenForm(new DeleteRegister(), 800, 500);
             });
 
             MenuEvent.EventSubmenu(menu, opciones[2], "Listar usuarios", (sender, e) => menuEvent.OpenForm(new ListRegisters(), 1067, 600));
-            MenuEvent.EventSubmenu(menu, opciones[5], "Acerca de", (s, e) =>
+
+            MenuEvent.EventSubmenu(menu, opciones[3], "Crear preguntas", (sender, e) => menuEvent.OpenForm(new CreateAsk(), 800, 500));
+            MenuEvent.EventSubmenu(menu, opciones[3], "Actualizar preguntas", (sender, e) => menuEvent.OpenForm(new UpdateAsk(), 900, 600));
+            MenuEvent.EventSubmenu(menu, opciones[3], "Eliminar preguntas", (sender, e) => menuEvent.OpenForm(new DeleteAsk(), 900, 600));
+            MenuEvent.EventSubmenu(menu, opciones[3], "Listar preguntas", (sender, e) => menuEvent.OpenForm(new ListAsk(), 900, 600));
+            MenuEvent.EventSubmenu(menu, opciones[4], "Responder formulario", (sender, e) =>
+            {
+                DialogResult result = MessageBox.Show("¿El egresado está registrado?", "Información", MessageBoxButtons.YesNo, MessageBoxIcon.Information);
+                if (result == DialogResult.Yes)
+                {
+                    menuEvent.OpenForm(new ValidateGraduate(), 300, 450);
+                }
+                else
+                {
+                    menuEvent.OpenForm(new Graduate(), 1067, 600);
+                }
+            });
+            MenuEvent.EventSubmenu(menu, opciones[5], "Color de menu strip", (sender, e) =>
+            {
+                MessageBox.Show("Esta opción cambiará el color del menú.", "Color de menú", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            });
+
+            MenuEvent.EventSubmenu(menu, opciones[6], "Acerca de", (s, e) =>
             {
                 Form about = new About();
                 about.Show();
@@ -108,7 +139,10 @@ namespace Model357App
         private void buttonAdmins_Click(object sender, EventArgs e)
         {
             if (MenuEvent.IsEnabledToolStripItems((MenuStrip)this.Controls["menuStrip1"], "Administradores"))
-                MessageBox.Show("Aquí se gestionarán los administradores.", "Administradores", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            {
+                menuEvent = new MenuEvent(this);
+                menuEvent.OpenForm(new ListAdmin(), 1067, 600);
+            }
 
             else
                 MessageBox.Show("No tienes permisos para acceder a esta sección.", "Acceso Denegado", MessageBoxButtons.OK, MessageBoxIcon.Warning);
@@ -129,7 +163,19 @@ namespace Model357App
         private void buttonQuestions_Click(object sender, EventArgs e)
         {
             if (MenuEvent.IsEnabledToolStripItems((MenuStrip)this.Controls["menuStrip1"], "Encuesta"))
-                MessageBox.Show("Aquí se gestionarán las preguntas de la encuesta.", "Encuesta", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            {
+                DialogResult result = MessageBox.Show("¿El egresado está registrado?", "Información", MessageBoxButtons.YesNo, MessageBoxIcon.Information);
+                if (result == DialogResult.Yes)
+                {
+                    menuEvent = new MenuEvent(this);    
+                    menuEvent.OpenForm(new ValidateGraduate(), 300, 450);
+                }
+                else
+                {
+                    MenuEvent menuEvent = new MenuEvent(this);
+                    menuEvent.OpenForm(new Graduate(), 1067, 600);
+                }
+            }
         }
         
     }

@@ -19,15 +19,15 @@ namespace Model357App
             MaximizeBox = false;
             Size = new Size(1067, 600);
 
-            string[] opciones = { "Archivo", "Administradores", "Usuarios", "Encuesta", "Configuración", "Ayuda" };
+            string[] opciones = { "Archivo", "Administradores", "Usuarios", "Encuesta", "Egresado", "Configuración", "Ayuda" };
             MenuStrip menu = DinamicControls.CreateMenuStrip(opciones);
 
             ToolStripMenuItem[] itemsAdmins =
             {
-                DinamicControls.CreateToolStripItem("Registrar administrador"),
-                DinamicControls.CreateToolStripItem("Actualizar administrador"),
-                DinamicControls.CreateToolStripItem("Eliminar administrador"),
-                DinamicControls.CreateToolStripItem("Listar administrador"),
+                DinamicControls.CreateToolStripItem("Registrar administradores"),
+                DinamicControls.CreateToolStripItem("Actualizar administradores"),
+                DinamicControls.CreateToolStripItem("Eliminar administradores"),
+                DinamicControls.CreateToolStripItem("Listar administradores"),
             };
 
             ToolStripMenuItem[] itemsUsuario =
@@ -46,24 +46,39 @@ namespace Model357App
                 DinamicControls.CreateToolStripItem("Listar preguntas"),
             };
 
-            Form login = new Login();
+            
             MenuEvent menuEvent = new MenuEvent(this);
 
             MenuEvent.AddToolStripItem(menu, opciones[0], new ToolStripMenuItem("Iniciar sesión"));
             MenuEvent.AddToolStripMenuItems(menu, itemsAdmins, opciones[1]);
             MenuEvent.AddToolStripMenuItems(menu, itemsUsuario, opciones[2]);
             MenuEvent.AddToolStripMenuItems(menu, itemsEncuesta, opciones[3]);
-            MenuEvent.AddSubmenu(menu, opciones[4], "Color de fondo");
-            MenuEvent.AddSubmenu(menu, opciones[4], "Letra y tamaño");
-            MenuEvent.AddToolStripItem(menu, opciones[5], new ToolStripMenuItem("Acerca de"));
+            MenuEvent.AddSubmenu(menu, opciones[4], "Responder formulario");
+            MenuEvent.AddSubmenu(menu, opciones[5], "Color de menu strip");
+            MenuEvent.AddToolStripItem(menu, opciones[6], new ToolStripMenuItem("Acerca de"));
 
             MenuEvent.BlockToolStripItems(menu, opciones[1], false);
             MenuEvent.BlockToolStripItems(menu, opciones[2], false);
             MenuEvent.BlockToolStripItems(menu, opciones[3], false);
             MenuEvent.BlockToolStripItems(menu, opciones[4], false);
+            MenuEvent.BlockToolStripItems(menu, opciones[5], false);
 
-            MenuEvent.EventSubmenu(menu, opciones[0], "Iniciar sesión", (s, args) => menuEvent.OpenForm(login, 1067, 600));
-            MenuEvent.EventSubmenu(menu, opciones[5], "Acerca de", (s, args) =>
+            MenuEvent.EventSubmenu(menu, opciones[0], "Iniciar sesión", (s, args) =>
+            {
+                Form login = new Login();
+                menuEvent.OpenForm(login, 1067, 600);
+                
+                // limpiar al cerrar formulario
+                login.Controls["textboxUser"].Text = string.Empty; 
+                login.Controls["textboxPassword"].Text = string.Empty;
+            });
+
+            MenuEvent.EventSubmenu(menu, opciones[5], "Color de menu strip", (sender, e) =>
+            {
+                MessageBox.Show("Esta opción cambiará el color del menú.", "Color de menú", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            });
+
+            MenuEvent.EventSubmenu(menu, opciones[6], "Acerca de", (s, args) =>
             {
                 Form about = new About();
                 about.Show();

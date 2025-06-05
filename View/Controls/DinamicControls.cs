@@ -116,10 +116,11 @@ namespace Model357App
         }
 
         // crear control dinamico para texto de tipo link
-        public static LinkLabel CreateLinkLabel(string texto, Point ubicacion, Size tamaño, EventHandler onClick)
+        public static LinkLabel CreateLinkLabel(string nombre, string texto, Point ubicacion, Size tamaño, EventHandler onClick)
         {
             LinkLabel linkLabel = new LinkLabel
             {
+                Name = nombre,
                 Text = texto,
                 Location = ubicacion,
                 Size = tamaño,
@@ -238,53 +239,49 @@ namespace Model357App
                 SelectionMode = DataGridViewSelectionMode.FullRowSelect
             };
             dataGridView.CurrentCell = null;
-            dataGridView.ClearSelection();
 
             return dataGridView;
         }
 
-    }
-
-    public partial class CustomTexBox : TextBox
-    {
-        public CustomTexBox()
+        public static DataGridView CreateDataGrid(string name, int x, int y, int width, int height)
         {
-            //SetStyle(ControlStyles.SupportsTransparentBackColor |
-            //    ControlStyles.OptimizedDoubleBuffer |
-            //    ControlStyles.AllPaintingInWmPaint |
-            //    ControlStyles.ResizeRedraw |
-            //    ControlStyles.UserPaint, true);
-
-            SetStyle(ControlStyles.UserPaint, true);
-            Font = new Font("Segoe UI", 10, FontStyle.Regular, GraphicsUnit.Point);
-            BorderStyle = BorderStyle.None;
-            ForeColor = Color.Black;
-
-        }
-
-        public TextBox ReturnCustomTextBox()
-        {
-            return this;
-        }
-
-        protected override void OnPaint(PaintEventArgs e)
-        {
-            base.OnPaint(e);
-            // Dibuja una línea en la parte inferior
-            using (Pen pen = new Pen(Color.Gray, 1))
+            DataGridView dataGrid = new DataGridView
             {
-                e.Graphics.DrawLine(pen,
-                    0, this.Height - 1,           // punto inicial
-                    this.Width, this.Height - 1); // punto final
-            }
+                Name = name,
+                Location = new Point(x, y),
+                Size = new Size(width, height),
+                AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.None,
+                BackgroundColor = SystemColors.Control, // Color por defecto del sistema
+                BorderStyle = BorderStyle.Fixed3D,      // Borde por defecto
+                ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize,
+                AllowUserToResizeColumns = false,
+                AllowUserToResizeRows = false,
+                AllowUserToAddRows = false,
+                AllowUserToDeleteRows = false,
+                ReadOnly = true,                        // Solo lectura
+                SelectionMode = DataGridViewSelectionMode.FullRowSelect,
+                MultiSelect = false,
+                RowHeadersVisible = false
+            };
+
+            // Solo configuramos la fuente en negrita para los encabezados
+            dataGrid.ColumnHeadersDefaultCellStyle.Font = new Font("Consolas", 10, FontStyle.Bold);
+
+            return dataGrid;
         }
 
-        //protected override void OnPaintBackground(PaintEventArgs e)
-        //{
-        //    using (SolidBrush brush = new SolidBrush(BackColor))
-        //    {
-        //        e.Graphics.FillRectangle(brush, ClientRectangle);
-        //    }
-        //}
+        public static Panel CreateScrollPanel(string name, int x, int y, int width, int height)
+        {
+            Panel panel = new Panel
+            {
+                Name = name,
+                Location = new Point(x, y),
+                Size = new Size(width, height),
+                AutoScroll = true,
+                BorderStyle = BorderStyle.FixedSingle
+            };
+            return panel;
+        }
+
     }
 }

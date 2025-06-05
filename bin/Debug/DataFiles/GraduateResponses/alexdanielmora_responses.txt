@@ -1,0 +1,13 @@
+Programa: Ingeniería de sistemas
+Nombre completo: alex daniel mora
+Fecha de respuesta: 2025-06-05 16:05:05
+----------------------------------------
+Pregunta: mencione 5 lenguajes de programación 
+Respuesta: python, java, c, c#, c++
+----------------------------------------
+Pregunta: ¿qué significa POO?
+Respuesta: programacion orientada a objetos
+----------------------------------------
+Pregunta: ¿cuántos programas hay en la upc-aguachica?
+Respuesta: 6
+----------------------------------------

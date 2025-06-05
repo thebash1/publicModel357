@@ -17,7 +17,7 @@ namespace Model357App
 
             // añadir titulo al formulario
             int x = this.Width; int y = this.Height;
-            Label title = DinamicControls.CreateLabel("label1", "Registro", x / 2 - 80, 30, 300, 40);
+            Label title = DinamicControls.CreateLabel("label1", "Registro usuarios", x / 2 - 150, 30, 300, 40);
             title.Font = new Font("Consolas", 20, FontStyle.Bold);
 
             #region formulario registro
@@ -26,9 +26,9 @@ namespace Model357App
             labelName.TextAlign = ContentAlignment.TopRight;
             TextBox name = DinamicControls.CreateTextBox("textboxName", x / 4, y / 5, 200, 40);
 
-            Label labelLastName = DinamicControls.CreateLabel("labelLastName", "Apellido: ", x / 4 + 200, y / 5, 100, 40);
+            Label labelLastName = DinamicControls.CreateLabel("labelLastName", "Apellido: ", x / 4 + 250, y / 5, 100, 40);
             labelLastName.TextAlign = ContentAlignment.TopRight;
-            TextBox lastName = DinamicControls.CreateTextBox("textboxLastName", x / 4 + 300, y / 5, 200, 40);
+            TextBox lastName = DinamicControls.CreateTextBox("textboxLastName", x / 4 + 350, y / 5, 200, 40);
 
             //// campo de usuario
             //Label labelUser = ControlCreator.CreateLabel("labelUser", "Usuario: ", x / 4 - 100, y / 3 - 20, 100, 40);
@@ -61,9 +61,9 @@ namespace Model357App
             TextBox email = DinamicControls.CreateTextBox("textboxEmail", x / 4, userY, 200, 40);
 
             // campo de teléfono
-            Label labelPhone = DinamicControls.CreateLabel("labelPhone", "Teléfono: ", x / 4 + 200, userY, 100, 40);
+            Label labelPhone = DinamicControls.CreateLabel("labelPhone", "Teléfono: ", x / 4 + 250, userY, 100, 40);
             labelPhone.TextAlign = ContentAlignment.TopRight;
-            TextBox phone = DinamicControls.CreateTextBox("textboxPhone", x / 4 + 300, userY, 200, 40);
+            TextBox phone = DinamicControls.CreateTextBox("textboxPhone", x / 4 + 350, userY, 200, 40);
 
             // campo de sexo
             Label labelSex = DinamicControls.CreateLabel("labelSex", "Sexo: ", x / 4 - 100, emailY, 100, 40);
@@ -74,9 +74,9 @@ namespace Model357App
             sex.DropDownStyle = ComboBoxStyle.DropDownList; // establece solo lectura en el combo box
 
             // campo de edad
-            Label labelAge = DinamicControls.CreateLabel("labelAge", "Edad: ", x / 4 + 200, emailY, 100, 40);
+            Label labelAge = DinamicControls.CreateLabel("labelAge", "Edad: ", x / 4 + 250, emailY, 100, 40);
             labelAge.TextAlign = ContentAlignment.TopRight;
-            ComboBox age = DinamicControls.CrearComboBox("comboboxAge", x / 4 + 300, emailY, 200, 40);
+            ComboBox age = DinamicControls.CrearComboBox("comboboxAge", x / 4 + 350, emailY, 200, 40);
             addItemsComboBox(age, returnArrayStrNumbers());
             age.DropDownStyle = ComboBoxStyle.DropDownList; // establece solo lectura en el combo box
             
@@ -86,9 +86,9 @@ namespace Model357App
             TextBox user = DinamicControls.CreateTextBox("textboxUser", x / 4, sexY, 200, 40);
 
             // campo de teléfono
-            Label labelPassword = DinamicControls.CreateLabel("labelPassword", "Contraseña: ", x / 4 + 200, sexY, 100, 40);
+            Label labelPassword = DinamicControls.CreateLabel("labelPassword", "Contraseña: ", x / 4 + 250, sexY, 100, 40);
             labelPassword.TextAlign = ContentAlignment.TopRight;
-            TextBox password = DinamicControls.CreateTextBox("textboxPassword", x / 4 + 300, sexY, 200, 40);
+            TextBox password = DinamicControls.CreateTextBox("textboxPassword", x / 4 + 350, sexY, 200, 40);
 
             // campo de programa de estudio
             //Label labelProgram = DinamicControls.CreateLabel("labelProgram", "Programa: ", x / 4 - 100, sexY, 100, 40);
@@ -134,37 +134,48 @@ namespace Model357App
             //this.Controls.Add(programEndDate);
 
             // botón de registro
-            Button btnRegister = DinamicControls.CreateButton("btnRegister", "Registrarme", x / 2 - 120, y / 2 + 160, 200, 40);
-            
+
             //LinkLabel linkLogin = ControlCreator.CreateLinkLabel(
             //    "Iniciar sesión",
             //    new Point(x / 2 - 170 + 50, y / 2 + 200),
             //    new Size(200, 40),
             //    (s, args) => this.Close());
             //linkLogin.TextAlign = ContentAlignment.MiddleCenter;
+           
+            // En el constructor después de los otros controles
+            Label labelRole = DinamicControls.CreateLabel("labelRole", "Rol:", x / 4 - 100, programY + 25, 100, 40);
+            labelRole.TextAlign = ContentAlignment.TopRight;
+            ComboBox comboRole = DinamicControls.CrearComboBox("comboboxRole", x / 4, programY + 25, 200, 40);
             
-            btnRegister.Click += new EventHandler(btnRegister_Click);
+            // Agregar los roles disponibles
+            comboRole.Items.Add(new { Text = "Usuario", Value = RegisterCrud.UserType.Usuario });
+            comboRole.Items.Add(new { Text = "Egresado", Value = RegisterCrud.UserType.Egresado });
+            comboRole.DisplayMember = "Text";
+            comboRole.ValueMember = "Value";
+            comboRole.DropDownStyle = ComboBoxStyle.DropDownList;
+
+            Button buttonRegister = DinamicControls.CreateButton("buttonRegister", "Registrar", x / 2, y / 2 + 160, 200, 40);
+            DinamicControls.CustomButton(buttonRegister);
+
+            Button buttonBack = DinamicControls.CreateButton("buttonBack", "Regresar", x / 2 - 250, y / 2 + 160, 200, 40);
+            DinamicControls.CustomButton(buttonBack);
+
+            buttonRegister.Click += new EventHandler(btnRegister_Click);
+            buttonBack.Click += (s, e) => this.Close();
 
             Controls.AddRange(new Control[]
             {
                 title,
-                labelName,
-                name,
-                labelLastName,
-                lastName,
-                labelEmail,
-                email,
-                labelPhone,
-                phone,
-                labelSex,
-                sex,
-                labelAge,
-                age,
-                labelUser,
-                user,
-                labelPassword,
-                password,
-                btnRegister
+                labelName, name,
+                labelLastName, lastName,
+                labelEmail, email,
+                labelPhone, phone,
+                labelSex, sex,
+                labelAge, age,
+                labelUser, user,
+                labelPassword, password,
+                labelRole, comboRole,
+                buttonBack, buttonRegister
             });
 
             //this.Controls.Add(linkLogin);
@@ -216,8 +227,19 @@ namespace Model357App
             string usuario = ((TextBox)this.Controls["textboxUser"]).Text;
             string contraseña = ((TextBox)this.Controls["textboxPassword"]).Text;
 
+            // Obtener el rol seleccionado
+            ComboBox comboRole = (ComboBox)Controls["comboboxRole"];
+            if (comboRole.SelectedItem == null)
+            {
+                MessageBox.Show("Por favor seleccione un rol.", 
+                    "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+
+            RegisterCrud.UserType selectedRole = ((dynamic)comboRole.SelectedItem).Value;
             RegisterCrud person = new RegisterCrud();
-            person.RegisterUser(nombres.ToLower(), apellidos.ToLower(), telefono, correo.ToLower(), sexo, edad, usuario, contraseña, this);
+            person.RegisterUser(nombres.ToLower(), apellidos.ToLower(), telefono, correo.ToLower(), sexo, edad, usuario, contraseña, selectedRole, this);
         }
 
         private void Register_Load(object sender, EventArgs e)
@@ -225,6 +247,5 @@ namespace Model357App
 
         }
         
-
     }
 }

@@ -17,6 +17,7 @@ namespace Model357App
         public DialogResult OpenForm(Form formToOpen, int sizex, int sizey)
         {
             formToOpen.Size = new System.Drawing.Size(sizex, sizey);
+            formToOpen.Owner = currentForm; // Establecer el propietario
             currentForm.Hide();
             formToOpen.FormClosed += (s, args) => currentForm.Show();
             return formToOpen.ShowDialog();

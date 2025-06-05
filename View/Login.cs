@@ -8,6 +8,7 @@ namespace Model357App
 {
     public partial class Login : Form
     {
+        public static int rol { get; set; } = 0;
         public Login()
         {
             InitializeComponent();
@@ -25,13 +26,13 @@ namespace Model357App
             Label labelUser = DinamicControls.CreateLabel("labelUser", "Usuario: ", x + 300, y - 60, 100, 40);
             labelUser.TextAlign = ContentAlignment.TopRight;
             labelUser.BackColor = Color.Transparent; 
-            TextBox textboxUser = DinamicControls.CreateTextBox("textboxUser", x + 400, y - 60, 200, 40);
+            TextBox textboxUser = DinamicControls.CreateTextBox("textboxUser", x + 400, y - 60, 200, 50);
 
             // añadir campo de contraseña con posición manual
             Label labelPassword = DinamicControls.CreateLabel("labelPassword", "Contraseña: ", x + 300, y, 100, 40);
             labelPassword.TextAlign = ContentAlignment.TopRight;
             labelPassword.BackColor = Color.Transparent;
-            TextBox textboxPassword = DinamicControls.CreateTextBox("textboxPassword", x + 400, y, 200, 40);
+            TextBox textboxPassword = DinamicControls.CreateTextBox("textboxPassword", x + 400, y, 200, 50);
             textboxPassword.UseSystemPasswordChar = true;
             //DinamicControls.CustomizeTextBox(textboxPassword);
 
@@ -91,24 +92,29 @@ namespace Model357App
                 MessageBox.Show("Inicio de sesión exitoso", "Bienvenido", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 MenuEvent menuEvent = new MenuEvent(this);
                 Form form = new Form2();
+                DialogResult dialog;
 
-                Controls["textboxUser"].Text = string.Empty; // Limpiar el campo de usuario
-                Controls["textboxPassword"].Text = string.Empty; // Limpiar el campo de contraseña
+                if (UserAuth.IsUser())
+                {
+                    rol = 2;
+                    Controls["textboxUser"].Text = string.Empty; // Limpiar el campo de usuario
+                    Controls["textboxPassword"].Text = string.Empty; // Limpiar el campo de contraseña
 
-                if (UserAuth.ValidateAdmin())
-                {
-                    MenuEvent.BlockToolStripItems((MenuStrip)form.Controls["menuStrip1"], "Usuarios", true);
-                    DialogResult dialog = menuEvent.OpenForm(form, 1067, 600);
-                    if (dialog == DialogResult.OK)
-                        Close();
-                }
-                else
-                {
                     MenuEvent.BlockToolStripItems((MenuStrip)form.Controls["menuStrip1"], "Administradores", false);
                     MenuEvent.BlockToolStripItems((MenuStrip)form.Controls["menuStrip1"], "Usuarios", false);
-                    DialogResult dialog = menuEvent.OpenForm(form, 1067, 600);
-                    if (dialog == DialogResult.OK)
-                        Close();
+                    dialog = menuEvent.OpenForm(form, 1067, 600);
+                }
+
+                else
+                {
+                    rol = 1;
+                    Controls["textboxUser"].Text = string.Empty; // Limpiar el campo de usuario
+                    Controls["textboxPassword"].Text = string.Empty; // Limpiar el campo de contraseña
+
+                    MenuEvent.BlockToolStripItems((MenuStrip)form.Controls["menuStrip1"], "Administradores", true);
+                    MenuEvent.BlockToolStripItems((MenuStrip)form.Controls["menuStrip1"], "Usuarios", true);
+                    dialog = menuEvent.OpenForm(form, 1067, 600);
+
                 }
             }
             else

@@ -2,17 +2,27 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Linq.Expressions;
 using System.Text;
 using System.Windows.Forms;
 
 namespace Model357App
 {
+
     internal class RegisterCrud
     {
+        public static string pathGraduate = "";
+        private Except except; // instancia de la clase Except para validaciones
+        public enum UserType
+        {
+            Administrador = 1,
+            Usuario = 2,
+            Egresado = 3
+        }
+
         private readonly string dataFolderPath;
         private readonly string registersFilePath;
         private readonly string usersFilePath;
+        private readonly string graduatesFilePath;
 
         public RegisterCrud()
         {
@@ -23,6 +33,8 @@ namespace Model357App
                 dataFolderPath = Path.Combine(projectPath, "DataFiles");
                 registersFilePath = Path.Combine(dataFolderPath, "registers.txt");
                 usersFilePath = Path.Combine(dataFolderPath, "users.txt");
+                graduatesFilePath = Path.Combine(dataFolderPath, "graduates.txt");
+                pathGraduate = graduatesFilePath;
 
                 CreateDataFiles();
             }
@@ -55,7 +67,7 @@ namespace Model357App
 
         private bool ValidateRegister(string nombres, string apellidos, string telefono, string correo, string sexo, string edad)
         {
-            Except except = new Except();
+            except = new Except();
 
             try
             {
@@ -132,54 +144,54 @@ namespace Model357App
             }
         }
 
-        public void InsertAdmin(string nombres, string apellidos, string correo, string telefono, string sexo, string edad)
-        {
-            if (!ExistAdmin())
-            {
-                Except except = new Except();
-                try
-                {
-                    if (!string.IsNullOrWhiteSpace(nombres) && !string.IsNullOrWhiteSpace(apellidos) && !string.IsNullOrWhiteSpace(telefono)
-                        && !string.IsNullOrWhiteSpace(correo) && !nombres.Contains(",") && !apellidos.Contains(",") && !telefono.Contains(",")
-                        && !correo.Contains(",") && except.validatePhone(telefono) && except.validateEmail(correo) && !string.IsNullOrEmpty(sexo)
-                        && !string.IsNullOrEmpty(edad))
-                    {
-                        string username = "admin";
-                        string password = "evellyf7339";
+        //public void InsertAdmin(string nombres, string apellidos, string correo, string telefono, string sexo, string edad)
+        //{
+        //    if (!ExistAdmin())
+        //    {
+        //        Except except = new Except();
+        //        try
+        //        {
+        //            if (!string.IsNullOrWhiteSpace(nombres) && !string.IsNullOrWhiteSpace(apellidos) && !string.IsNullOrWhiteSpace(telefono)
+        //                && !string.IsNullOrWhiteSpace(correo) && !nombres.Contains(",") && !apellidos.Contains(",") && !telefono.Contains(",")
+        //                && !correo.Contains(",") && except.validatePhone(telefono) && except.validateEmail(correo) && !string.IsNullOrEmpty(sexo)
+        //                && !string.IsNullOrEmpty(edad))
+        //            {
+        //                string username = "admin";
+        //                string password = "evellyf7339";
 
-                        string registerAdmin = $"{1},{nombres},{apellidos},{telefono},{correo},{sexo},{edad}";
-                        string userAdmin = $"{1},{username},{password}";
+        //                string registerAdmin = $"{1},{nombres},{apellidos},{telefono},{correo},{sexo},{edad},{UserRole.Administrator}";
+        //                string userAdmin = $"{1},{username},{password}";
 
-                        // Usar using para asegurar que los archivos se cierren correctamente
-                        using (StreamWriter regWriter = File.AppendText(registersFilePath))
-                        {
-                            regWriter.WriteLine(registerAdmin);
-                        }
+        //                // Usar using para asegurar que los archivos se cierren correctamente
+        //                using (StreamWriter regWriter = File.AppendText(registersFilePath))
+        //                {
+        //                    regWriter.WriteLine(registerAdmin);
+        //                }
 
-                        using (StreamWriter userWriter = File.AppendText(usersFilePath))
-                        {
-                            userWriter.WriteLine(userAdmin);
-                        }
+        //                using (StreamWriter userWriter = File.AppendText(usersFilePath))
+        //                {
+        //                    userWriter.WriteLine(userAdmin);
+        //                }
 
-                        MessageBox.Show($"Administrador registrado exitosamente.\n\nUsuario: {username}\nContraseña: {password}", "Registro exitoso", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                        return;
-                    }
+        //                MessageBox.Show($"Administrador registrado exitosamente.\n\nUsuario: {username}\nContraseña: {password}", "Registro exitoso", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        //                return;
+        //            }
 
-                    MessageBox.Show("No se ha podido guardar el administrador");
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show($"Error al insertar administrador: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
-            }
-        }
+        //            MessageBox.Show("No se ha podido guardar el administrador");
+        //        }
+        //        catch (Exception ex)
+        //        {
+        //            MessageBox.Show($"Error al insertar administrador: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+        //        }
+        //    }
+        //}
 
         // validar si existe un administrador
         public bool ExistAdmin()
         {
             try
             {
-                if (!File.Exists(registersFilePath) || !File.Exists(usersFilePath))
+                if (!File.Exists(registersFilePath) && !File.Exists(usersFilePath))
                     return false;
 
                 string lineReg;
@@ -210,9 +222,8 @@ namespace Model357App
             return false;
         }
 
-        public void RegisterUser(string nombres, string apellidos, string telefono, string correo, string sexo, string edad, string usuario, string contraseña, Form form)
+        public void RegisterUser(string nombres, string apellidos, string telefono, string correo, string sexo, string edad, string usuario, string contraseña, UserType rol, Form form)
         {
-
             if (ValidateRegister(nombres, apellidos, telefono, correo, sexo, edad))
             {
                 if (ValidateUser(usuario) && ValidatePassword(contraseña))
@@ -220,11 +231,11 @@ namespace Model357App
                     // Obtener siguiente ID
                     int nuevoId = GetNextId();
 
-                    // Guardar registro de persona
-                    string registroPersona = $"{nuevoId},{nombres},{apellidos},{telefono},{correo},{sexo},{edad}";
+                    // Guardar registro de persona con rol
+                    string registroPersona = $"{nuevoId},{nombres},{apellidos},{telefono},{correo},{sexo},{edad},{(int)rol}";
 
-                    // Guardar registro de usuario
-                    string registroUsuario = $"{nuevoId},{usuario},{contraseña}";
+                    // Guardar registro de usuario con rol
+                    string registroUsuario = $"{nuevoId},{usuario},{contraseña},{(int)rol}";
 
                     // Escribir en ambos archivos
                     File.AppendAllText(registersFilePath, registroPersona + Environment.NewLine);
@@ -243,6 +254,109 @@ namespace Model357App
             
         }
 
+        public void SaveGraduate(string name, string lastName, string email, string phone,
+        string sex, string age, string program, string rol, DateTimePicker dateInit, DateTimePicker dateEnd, Form form)
+        {
+            try
+            {
+                if (ValidateRegister(name, lastName, phone, email, sex, age))
+                {
+                    except = new Except();
+                    // Obtener siguiente ID
+                    int nuevoId = GetNextId();
+
+                    // Formatear las fechas en formato corto
+
+                    if (except.validateDate(dateInit, dateEnd))
+                    {
+                        string shortDateInit = dateInit.Value.ToString("dd/MM/yyyy");
+                        string shortDateEnd = dateEnd.Value.ToString("dd/MM/yyyy");
+
+                        // Crear registro del egresado
+                        string register = $"{nuevoId},{name},{lastName},{phone},{email}," +
+                                                $"{sex},{age},{rol},{program}," +
+                                                $"{shortDateInit},{shortDateEnd}";
+
+                        // Guardar en los archivos
+                        File.AppendAllText(graduatesFilePath, register + Environment.NewLine);
+
+                        MessageBox.Show($"Egresado registrado exitosamente.\n\n",
+                                        "Registro exitoso",
+                                        MessageBoxButtons.OK,
+                                        MessageBoxIcon.Information);
+
+                        ClearRegisterGraduate(form);
+                    }
+                    else
+                    {
+                        MessageBox.Show("Las fechas de inicio y fin del programa no son válidas.\n" +
+                                        "Asegúrese de que la fecha de inicio sea anterior a la fecha de fin y que la duración sea de al menos 5 años.",
+                                        "Error",
+                                        MessageBoxButtons.OK,
+                                        MessageBoxIcon.Warning);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error al registrar egresado: {ex.Message}",
+                               "Error",
+                               MessageBoxButtons.OK,
+                               MessageBoxIcon.Error);
+            }
+        }
+
+        public bool IsGraduateRegistered(string phone, string email)
+        {
+            try
+            {
+                // Verificar si el archivo existe
+                if (!File.Exists(graduatesFilePath))
+                {
+                    MessageBox.Show("No hay egresados registrados en el sistema.",
+                        "Advertencia",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Warning);
+                    return false;
+                }
+
+                // Leer todas las líneas del archivo
+                string[] graduates = File.ReadAllLines(graduatesFilePath);
+
+                // Buscar coincidencia de teléfono y correo
+                foreach (string graduate in graduates)
+                {
+                    if (!string.IsNullOrEmpty(graduate))
+                    {
+                        string[] data = graduate.Split(',');
+                        // El teléfono está en el índice 3 y el correo en el índice 4
+                        if (data.Length >= 5 &&
+                            data[3].Equals(phone, StringComparison.OrdinalIgnoreCase) &&
+                            data[4].Equals(email, StringComparison.OrdinalIgnoreCase))
+                        {
+                            return true;
+                        }
+                    }
+                }
+
+                // Si no se encontró coincidencia
+                MessageBox.Show("No se encuentra registrado como egresado.\n" +
+                               "Por favor, regístrese primero en el sistema.",
+                    "Advertencia",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning);
+                return false;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error al verificar el registro: {ex.Message}",
+                    "Error",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+                return false;
+            }
+        }
+
         private void ClearRegister(Form form)
         {
             form.Controls["textboxName"].Text = "";
@@ -253,9 +367,24 @@ namespace Model357App
             ((ComboBox)form.Controls["comboboxAge"]).SelectedIndex = -1;
             form.Controls["textboxUser"].Text = "";
             form.Controls["textboxPassword"].Text = "";
+            ((ComboBox)form.Controls["comboboxRole"]).SelectedIndex = -1;
 
             // DateTimePicker initDateProgram = (DateTimePicker)Controls["datepickerInitDate"];
             // DateTimePicker endDateProgram = (DateTimePicker)Controls["datepickerGraduationDate"];
+        }
+
+        private void ClearRegisterGraduate(Form form)
+        {
+            form.Controls["textboxName"].Text = "";
+            form.Controls["textboxLastName"].Text = "";
+            form.Controls["textboxPhone"].Text = "";
+            form.Controls["textboxEmail"].Text = "";
+            ((ComboBox)form.Controls["comboboxSex"]).SelectedIndex = -1;
+            ((ComboBox)form.Controls["comboboxAge"]).SelectedIndex = -1;
+            ((ComboBox)form.Controls["comboboxProgram"]).SelectedIndex = -1;
+            ((ComboBox)form.Controls["comboboxRole"]).SelectedIndex = 0;
+            ((DateTimePicker)form.Controls["datepickerInitDate"]).Value = DateTime.Now;
+            ((DateTimePicker)form.Controls["datepickerEndDate"]).Value = DateTime.Now;
         }
 
         private int GetNextId()
@@ -391,6 +520,88 @@ namespace Model357App
             }
         }
 
+        public void ListRegistersUsers(DataGridView dataGridView)
+        {
+            try
+            {
+                // Verificar si existen los archivos
+                if (!File.Exists(registersFilePath) || !File.Exists(usersFilePath))
+                {
+                    MessageBox.Show("No hay registros disponibles.", "Información", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    return;
+                }
+
+                // Leer todos los registros y usuarios
+                string[] registers = File.ReadAllLines(registersFilePath);
+                string[] users = File.ReadAllLines(usersFilePath);
+
+                // Limpiar el DataGridView
+                dataGridView.Rows.Clear();
+                dataGridView.Columns.Clear();
+
+                // Configurar columnas
+                dataGridView.Columns.Add("Id", "ID");
+                dataGridView.Columns.Add("Nombres", "Nombres");
+                dataGridView.Columns.Add("Apellidos", "Apellidos");
+                dataGridView.Columns.Add("Telefono", "Teléfono");
+                dataGridView.Columns.Add("Correo", "Correo");
+                dataGridView.Columns.Add("Sexo", "Sexo");
+                dataGridView.Columns.Add("Edad", "Edad");
+                dataGridView.Columns.Add("Rol", "Rol");
+
+                // Procesar cada registro
+                foreach (string register in registers)
+                {
+                    if (!string.IsNullOrEmpty(register))
+                    {
+                        string[] datos = register.Split(',');
+                        if (datos.Length == 8) // Asegurarse que tenga todos los campos
+                        {
+                            // Verificar si el rol es Usuario (2)
+                            if (datos[7] == ((int)UserType.Usuario).ToString())
+                            {
+                                foreach (string user in users)
+                                {
+                                    if (!string.IsNullOrEmpty(user))
+                                    {
+                                        string[] datosUsuario = user.Split(',');
+                                        if (datosUsuario[0] == datos[0]) // Comparar IDs
+                                        {
+                                            break;
+                                        }
+                                    }
+                                }
+
+                                // Agregar fila al DataGridView
+                                dataGridView.Rows.Add(
+                                    datos[0],          // ID
+                                    datos[1],          // Nombres
+                                    datos[2],          // Apellidos
+                                    datos[3],          // Teléfono
+                                    datos[4],          // Correo
+                                    datos[5],          // Sexo
+                                    datos[6],          // Edad
+                                    GetRoleText(datos[7])        // Rol en texto
+                                );
+                            }
+                        }
+                    }
+                }
+
+                // Ajustar el ancho de las columnas
+                dataGridView.AutoResizeColumns();
+
+                // Si no hay registros mostrar mensaje
+                if (dataGridView.Rows.Count == 0)
+                    MessageBox.Show("No hay personas registradas.", "Información", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error al listar personas: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
         public void ListRegisters(DataGridView dataGridView)
         {
             try
@@ -418,6 +629,7 @@ namespace Model357App
                 dataGridView.Columns.Add("Correo", "Correo");
                 dataGridView.Columns.Add("Sexo", "Sexo");
                 dataGridView.Columns.Add("Edad", "Edad");
+                dataGridView.Columns.Add("Rol", "Rol");
 
                 // Procesar cada registro
                 foreach (string register in registers)
@@ -425,34 +637,37 @@ namespace Model357App
                     if (!string.IsNullOrEmpty(register))
                     {
                         string[] datos = register.Split(',');
-                        if (datos.Length >= 7) // Asegurarse que tenga todos los campos
+                        if (datos.Length == 8) // Asegurarse que tenga todos los campos
                         {
-                            // Verificar si tiene usuario comparando IDs
-                            bool hasUser = false;
-                            foreach (string user in users)
+                            // Verificar si el rol es Usuario (2)
+                            if (datos[7] == ((int)UserType.Usuario).ToString())
                             {
-                                if (!string.IsNullOrEmpty(user))
+                                string username = string.Empty;
+                                foreach (string user in users)
                                 {
-                                    string[] datosUsuario = user.Split(',');
-                                    if (datosUsuario[0] == datos[0]) // Comparar IDs
+                                    if (!string.IsNullOrEmpty(user))
                                     {
-                                        hasUser = true;
-                                        break;
+                                        string[] datosUsuario = user.Split(',');
+                                        if (datosUsuario[0] == datos[0]) // Comparar IDs
+                                        {
+                                            username = datosUsuario[1]; // Obtener el nombre de usuario
+                                            break;
+                                        }
                                     }
                                 }
-                            }
 
-                            // Agregar fila al DataGridView
-                            dataGridView.Rows.Add(
-                                datos[0],          // ID
-                                datos[1],          // Nombres
-                                datos[2],          // Apellidos
-                                datos[3],          // Teléfono
-                                datos[4],          // Correo
-                                datos[5],          // Sexo
-                                datos[6],          // Edad
-                                hasUser ? "si" : "no"  // Indicador de usuario
-                            );
+                                // Agregar fila al DataGridView
+                                dataGridView.Rows.Add(
+                                    datos[0],          // ID
+                                    datos[1],          // Nombres
+                                    datos[2],          // Apellidos
+                                    datos[3],          // Teléfono
+                                    datos[4],          // Correo
+                                    datos[5],          // Sexo
+                                    datos[6],          // Edad
+                                    username        // Usuario
+                                );
+                            }
                         }
                     }
                 }
@@ -463,7 +678,7 @@ namespace Model357App
                 // Si no hay registros mostrar mensaje
                 if (dataGridView.Rows.Count == 0)
                     MessageBox.Show("No hay personas registradas.", "Información", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                
+
             }
             catch (Exception ex)
             {
@@ -483,12 +698,12 @@ namespace Model357App
                     return;
                 }
 
-                // Verificar que el ID no esté vacío
-                if (string.IsNullOrEmpty(id))
-                {
-                    MessageBox.Show("Debe seleccionar una persona para eliminar.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                    return;
-                }
+                //// Verificar que el ID no esté vacío
+                //if (string.IsNullOrEmpty(id))
+                //{
+                //    MessageBox.Show("Debe seleccionar una persona para eliminar.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                //    return;
+                //}
 
                 // Verificar que no se intente eliminar al administrador (ID = 1)
                 if (id == "1")
@@ -669,7 +884,7 @@ namespace Model357App
                     return;
                 }
 
-                if (!ValidateRegister(nombres, apellidos, correo, telefono, sexo, edad))
+                if (!ValidateRegister(nombres, apellidos, telefono, correo, sexo, edad))
                     return;
                 
                 string[] registers = File.ReadAllLines(registersFilePath);
@@ -683,12 +898,12 @@ namespace Model357App
                 }
 
                 var (userFound, currentUsername, currentPassword) = FindUserById(id, users);
-                
+
                 // Determinar si necesitamos un nuevo nombre de usuario
-                string newUsername = currentUsername;
-                if ((oldName != nombres || oldLastName != apellidos) && userFound)
-                    newUsername = GenerateUser(nombres, apellidos);
-                
+                //string newUsername = currentUsername;
+                //if ((oldName != nombres || oldLastName != apellidos) && userFound)
+                //    newUsername = GenerateUser(nombres, apellidos);
+
 
                 // Crear línea de registro actualizada
                 string updateRegisterLine = CreateUpdateRegisterLine(id, nombres, apellidos, telefono, correo, 
@@ -696,7 +911,7 @@ namespace Model357App
 
                 // Actualizar listas
                 var newRegisters = UpdateRegistersList(registers, id, updateRegisterLine);
-                var newUsers = UpdateUsersList(users, id, newUsername, currentPassword);
+                //var newUsers = UpdateUsersList(users, id, newUsername, currentPassword);
 
                 // Confirmar actualización
                 DialogResult confirmacion = MessageBox.Show(
@@ -711,13 +926,13 @@ namespace Model357App
                     try
                     {
                         File.WriteAllLines(registersFilePath, newRegisters);
-                        File.WriteAllLines(usersFilePath, newUsers);
+                        //File.WriteAllLines(usersFilePath, newUsers);
 
-                        string mensajeUsuario = userFound && newUsername != currentUsername
-                            ? $"\n\nNuevo usuario: {newUsername}"
-                            : "";
+                        //string mensajeUsuario = userFound && newUsername != currentUsername
+                        //    ? $"\n\nNuevo usuario: {newUsername}"
+                        //    : "";
 
-                        MessageBox.Show($"Registro actualizado exitosamente.{mensajeUsuario}", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        MessageBox.Show($"Registro actualizado exitosamente.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     }
                     catch (Exception ex)
                     {
@@ -731,5 +946,17 @@ namespace Model357App
             }
         }
 
+        private string GetRoleText(string roleId)
+        {
+
+            if (roleId == "1")
+                return "Administrador";
+            else if (roleId == "2")
+                return "Usuario";
+            else if (roleId == "3")
+                return "Egresado";
+            else
+                throw new NotImplementedException();
+        }
     }
 }

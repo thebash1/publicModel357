@@ -46,14 +46,51 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Model\AdminCrud.cs" />
+    <Compile Include="Model\AskCrud.cs" />
+    <Compile Include="Model\Question.cs" />
+    <Compile Include="Model\User.cs" />
     <Compile Include="View\About.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="View\About.Designer.cs">
       <DependentUpon>About.cs</DependentUpon>
     </Compile>
+    <Compile Include="View\AddAdmin.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="View\AddAdmin.Designer.cs">
+      <DependentUpon>AddAdmin.cs</DependentUpon>
+    </Compile>
+    <Compile Include="View\AddAskOpt.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="View\AddAskOpt.Designer.cs">
+      <DependentUpon>AddAskOpt.cs</DependentUpon>
+    </Compile>
+    <Compile Include="View\AnswerQuestions.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="View\Controls\DinamicControls.cs" />
     <Compile Include="Model\Except.cs" />
+    <Compile Include="View\CreateAsk.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="View\CreateAsk.Designer.cs">
+      <DependentUpon>CreateAsk.cs</DependentUpon>
+    </Compile>
+    <Compile Include="View\DeleteAdmin.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="View\DeleteAdmin.Designer.cs">
+      <DependentUpon>DeleteAdmin.cs</DependentUpon>
+    </Compile>
+    <Compile Include="View\DeleteAsk.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="View\DeleteAsk.Designer.cs">
+      <DependentUpon>DeleteAsk.cs</DependentUpon>
+    </Compile>
     <Compile Include="View\DeleteRegister.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -71,6 +108,30 @@
     </Compile>
     <Compile Include="View\Form2.Designer.cs">
       <DependentUpon>Form2.cs</DependentUpon>
+    </Compile>
+    <Compile Include="View\FormUpdateAsk.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="View\FormUpdateAsk.Designer.cs">
+      <DependentUpon>FormUpdateAsk.cs</DependentUpon>
+    </Compile>
+    <Compile Include="View\Graduate.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="View\Graduate.Designer.cs">
+      <DependentUpon>Graduate.cs</DependentUpon>
+    </Compile>
+    <Compile Include="View\ListAdmin.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="View\ListAdmin.Designer.cs">
+      <DependentUpon>ListAdmin.cs</DependentUpon>
+    </Compile>
+    <Compile Include="View\ListAsk.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="View\ListAsk.Designer.cs">
+      <DependentUpon>ListAsk.cs</DependentUpon>
     </Compile>
     <Compile Include="View\ListRegisters.cs">
       <SubType>Form</SubType>
@@ -97,14 +158,50 @@
     </Compile>
     <Compile Include="Model\UserAuth.cs" />
     <Compile Include="Model\UserCrud.cs" />
+    <Compile Include="View\UpdateAdmin.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="View\UpdateAdmin.Designer.cs">
+      <DependentUpon>UpdateAdmin.cs</DependentUpon>
+    </Compile>
+    <Compile Include="View\UpdateAsk.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="View\UpdateAsk.Designer.cs">
+      <DependentUpon>UpdateAsk.cs</DependentUpon>
+    </Compile>
     <Compile Include="View\UpdateRegister.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="View\UpdateRegister.Designer.cs">
       <DependentUpon>UpdateRegister.cs</DependentUpon>
     </Compile>
+    <Compile Include="View\ValidateGraduate.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="View\ValidateGraduate.Designer.cs">
+      <DependentUpon>ValidateGraduate.cs</DependentUpon>
+    </Compile>
     <EmbeddedResource Include="View\About.resx">
       <DependentUpon>About.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="View\AddAdmin.resx">
+      <DependentUpon>AddAdmin.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="View\AddAskOpt.resx">
+      <DependentUpon>AddAskOpt.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="View\AnswerQuestions.resx">
+      <DependentUpon>AnswerQuestions.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="View\CreateAsk.resx">
+      <DependentUpon>CreateAsk.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="View\DeleteAdmin.resx">
+      <DependentUpon>DeleteAdmin.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="View\DeleteAsk.resx">
+      <DependentUpon>DeleteAsk.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="View\DeleteRegister.resx">
       <DependentUpon>DeleteRegister.cs</DependentUpon>
@@ -114,6 +211,18 @@
     </EmbeddedResource>
     <EmbeddedResource Include="View\Form2.resx">
       <DependentUpon>Form2.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="View\FormUpdateAsk.resx">
+      <DependentUpon>FormUpdateAsk.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="View\Graduate.resx">
+      <DependentUpon>Graduate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="View\ListAdmin.resx">
+      <DependentUpon>ListAdmin.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="View\ListAsk.resx">
+      <DependentUpon>ListAsk.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="View\ListRegisters.resx">
       <DependentUpon>ListRegisters.cs</DependentUpon>
@@ -134,8 +243,17 @@
     <EmbeddedResource Include="View\Register.resx">
       <DependentUpon>Register.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="View\UpdateAdmin.resx">
+      <DependentUpon>UpdateAdmin.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="View\UpdateAsk.resx">
+      <DependentUpon>UpdateAsk.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="View\UpdateRegister.resx">
       <DependentUpon>UpdateRegister.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="View\ValidateGraduate.resx">
+      <DependentUpon>ValidateGraduate.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>

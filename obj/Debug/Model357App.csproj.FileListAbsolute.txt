@@ -51,3 +51,16 @@ C:\Users\Usuario\Desktop\Git\model357\obj\Debug\Model357App.View.DeleteRegister.
 C:\Users\Usuario\Desktop\Git\model357\obj\Debug\Model357App.View.ListRegisters.resources
 C:\Users\Usuario\Desktop\Git\model357\obj\Debug\Model357App.View.UpdateRegister.resources
 C:\Users\Usuario\Desktop\Git\model357\obj\Debug\Model357App.View.About.resources
+C:\Users\Usuario\Desktop\Git\model357\obj\Debug\Model357App.View.CreateAsk.resources
+C:\Users\Usuario\Desktop\Git\model357\obj\Debug\Model357App.View.AddAdmin.resources
+C:\Users\Usuario\Desktop\Git\model357\obj\Debug\Model357App.View.DeleteAdmin.resources
+C:\Users\Usuario\Desktop\Git\model357\obj\Debug\Model357App.View.ListAdmin.resources
+C:\Users\Usuario\Desktop\Git\model357\obj\Debug\Model357App.View.UpdateAdmin.resources
+C:\Users\Usuario\Desktop\Git\model357\obj\Debug\Model357App.View.ListAsk.resources
+C:\Users\Usuario\Desktop\Git\model357\obj\Debug\Model357App.View.AddAskOpt.resources
+C:\Users\Usuario\Desktop\Git\model357\obj\Debug\Model357App.View.DeleteAsk.resources
+C:\Users\Usuario\Desktop\Git\model357\obj\Debug\Model357App.View.UpdateAsk.resources
+C:\Users\Usuario\Desktop\Git\model357\obj\Debug\Model357App.View.FormUpdateAsk.resources
+C:\Users\Usuario\Desktop\Git\model357\obj\Debug\Model357App.View.Graduate.resources
+C:\Users\Usuario\Desktop\Git\model357\obj\Debug\Model357App.View.AnswerQuestions.resources
+C:\Users\Usuario\Desktop\Git\model357\obj\Debug\Model357App.View.ValidateGraduate.resources

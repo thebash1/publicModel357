@@ -93,6 +93,9 @@ namespace Model357App
         {
             try
             {
+                if (dateStar == null || dateEnd == null)
+                    return false;
+
                 DateTime fechaInicio = dateStar.Value;
                 DateTime fechaFin = dateEnd.Value;
 

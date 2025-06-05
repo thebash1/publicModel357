@@ -13,12 +13,12 @@ namespace Model357App
         static void Main()
         {
             // crear usuario administrador por defecto si no existe
-            RegisterCrud admin = new RegisterCrud();
-            admin.InsertAdmin("evelly", "forgionny", "evelly@unicesar.edu.co", "3122747339", "Femenino", "23");   
-            
+            AdminCrud adminDefault = new AdminCrud();
+            adminDefault.CreateAdmin("evelly", "forgionny", "3122747339", "evelly@unicesar.edu.co", "Femenino", "23", "evellyf01", "evelly7339");
+
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new UpdateRegister());
+            Application.Run(new Form1());
         }
     }
 }

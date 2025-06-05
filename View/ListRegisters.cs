@@ -16,7 +16,7 @@ namespace Model357App.View
             MaximizeBox = false;
 
             int x = Width; int y = Height;
-            Label tittle = DinamicControls.CreateLabel("labelTittle", "Lista de registros", x/2 - 500, 20, 300, 40);
+            Label tittle = DinamicControls.CreateLabel("labelTittle", "Lista de usuarios", x/2 - 500, 20, 300, 40);
             tittle.Font = new Font("Consolas", 20, FontStyle.Bold);
             Controls.Add(tittle);
 
@@ -28,7 +28,11 @@ namespace Model357App.View
         private void ListUsers_Load(object sender, EventArgs e)
         {
             RegisterCrud registerCrud = new RegisterCrud();
-            registerCrud.ListRegisters((DataGridView)Controls["dataGridViewList"]);
+            if (Login.rol == 1)
+                registerCrud.ListRegisters((DataGridView)Controls["dataGridViewList"]);
+
+            if (Login.rol ==2)
+                registerCrud.ListRegistersUsers((DataGridView)Controls["dataGridViewList"]);
         }
     }
 }
